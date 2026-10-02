@@ -13,7 +13,9 @@
 
 推送到 GitHub 的 main/master 分支会自动构建；也可以在 Actions 页面手动运行 **Build TrollStore IPA**。完成后从该次 workflow 的 Artifacts 下载 `PocketAgent-unsigned-ipa`，解压取得 IPA，再通过 TrollStore 安装。首次构建的 bundle id 是 `com.example.pocketagent`。
 
-当前工作目录没有 Git remote，因此需要先将这些工程文件放进你的 GitHub 仓库并推送后，Actions 才能实际运行。此运行环境是 Windows，不能本地运行 Xcode；IPA 是否构建成功以 GitHub Actions 结果为准。
+首版已推送到 GitHub，首次 Actions 构建成功并上传了 IPA artifact。以后推送到 main/master 会自动构建；也可以在 Actions 页面手动触发。Windows 环境不运行 Xcode，构建由 GitHub 的 macOS runner 完成。
+
+后续开发顺序和屏幕读取/全局悬浮的设备限制见 [ROADMAP.md](ROADMAP.md)。
 
 ## 功能边界
 
