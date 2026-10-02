@@ -1,0 +1,10 @@
+Package: com.qianhuan.pocketoverlaypoc
+Name: Pocket Overlay PoC
+Version: 0.1.0
+Architecture: iphoneos-arm64
+Description: Minimal SpringBoard floating bubble proof of concept for iOS 16.1.
+Maintainer: QianHuanHuan
+Author: QianHuanHuan
+Section: Tweaks
+Priority: optional
+Depends: firmware (>= 15.0), mobilesubstrate

@@ -17,6 +17,12 @@
 
 后续开发顺序和屏幕读取/全局悬浮的设备限制见 [ROADMAP.md](ROADMAP.md)。
 
+## SpringBoard 悬浮球 PoC
+
+`OverlayPoC/` 是独立的 iOS 15+ SpringBoard 注入验证包，当前只提供可拖动浮球和可关闭的小面板；不读取屏幕、不联网、不调用模型。GitHub Actions 的 **Build SpringBoard Overlay PoC** 会另外产出 rootless `.deb`，原来的应用 IPA 工作流仍保留。
+
+此 `.deb` 不是 TrollStore IPA。它需要与设备匹配的 rootless tweak 注入环境，并且只有在用户确认设备环境后才应安装测试。单独安装 TrollStore 不会让 SpringBoard 加载这个 tweak。测试失败时，从对应包管理器卸载 tweak 并重启 SpringBoard；不要将它安装到不匹配的 rootful/roothide 环境。
+
 ## 功能边界
 
 普通 iOS App 不能在其他 App 上任意显示全局浮窗，也不能静默读取其他 App 当前屏幕。当前版本提供应用内对话。之后可先加入用户主动选择截图/照片的视觉问答；持续屏幕读取需要用户授权的系统录屏流程，真正跨 App 的悬浮插件需另行设计 TrollStore 注入方案。

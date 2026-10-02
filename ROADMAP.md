@@ -66,7 +66,7 @@
 
 ### 推荐 PoC 顺序
 
-1. 先做一个只显示/关闭的 SpringBoard 测试浮球，不调用模型、不抓屏；确认你的 iPhone 型号、芯片架构和 Bootstrap 版本均在目标范围。
+1. 针对已确认的 iPhone 13 Pro / iOS 16.1（arm64e），先做一个只显示/拖动/关闭面板的 SpringBoard 测试浮球，不调用模型、不抓屏；安装前确认实际使用的 rootless tweak 注入环境及版本。
 2. 再做打开聊天面板、拖动、跨 App 返回/隐藏和重启恢复；如果 SpringBoard tweak 不稳定，改走 TrollFools 注入一个普通测试 App 的局部浮层。
 3. 最后才验证“当前画面提问”。被注入的 App 可以尝试在用户点按后读取自己前台窗口的快照；这只覆盖该 App。全屏跨 App 画面在 iOS 16.1 上需要另行验证 ReplayKit/系统级方案，不能套用 iOS 27 的 ScreenCaptureKit 示例。
 4. 每次采集都要求明确点按、显示预览、再发送；不后台连续采集，不默认自动上传。
