@@ -58,9 +58,20 @@
 
 ## 独立可行性验证：全局悬浮
 
-- 普通 SwiftUI App 的窗口只属于自身应用；先验证目标 iOS/TrollStore 组合上是否存在可维护的跨应用显示入口。
-- TrollStore 文档说明它不能向系统进程注入 tweak，因此不要预设“安装 IPA”就能在任意 App 上覆盖悬浮窗。
-- 只有在真实设备 PoC 能稳定显示、关闭、重启后恢复且不影响系统导航后，才规划插件化实现；若验证失败，提供应用内面板、分享扩展或快捷指令作为入口。
+普通 SwiftUI App 的窗口只属于自身应用。结合 iOS 16.1 + TrollStore，现有方案分三档：
+
+1. **PiP 兼容入口**：AVKit 可把视频帧放在系统管理的 PiP 小窗里，能跨 App 悬浮，但它是媒体播放窗口，不是任意 SwiftUI 面板。视频通话样式 PiP 不接收自定义触摸事件，适合展示短答/状态并点击返回主 App，不适合作完整聊天框。[Apple PiP 文档](https://developer.apple.com/documentation/avkit/adopting-picture-in-picture-for-video-calls)
+2. **按 App 注入**：TrollFools 是面向 TrollStore 的 in-place dylib/tweak 注入器，项目说明预期支持 iOS 14–17。可将我们的浮层插件注入被选中的普通第三方 App，在该 App 前台时创建同进程浮层；这不是所有 App 通用的一次安装方案，也不能把此能力延伸到 SpringBoard。[TrollFools](https://github.com/Lessica/TrollFools)
+3. **SpringBoard 系统级浮层**：TrollStore 本身不能注入系统进程；RootHide Bootstrap 的 release notes 提供了 iOS 16.0–17.0 的 SpringBoard tweak injection 支持，Serotonin 项目也覆盖 iOS 16.0–16.6.1，并要求 TrollStore、Bootstrap 和 ElleKit。这是 iOS 16.1 上最接近真正全局浮窗的路，但会引入额外系统组件、重启/恢复流程和兼容性风险，不等于普通 IPA 功能。[RootHide Bootstrap releases](https://github.com/roothide/Bootstrap/releases)、[Serotonin](https://github.com/SerotoninApp/Serotonin)、[TrollStore 能力边界](https://github.com/opa334/TrollStore)
+
+### 推荐 PoC 顺序
+
+1. 先做一个只显示/关闭的 SpringBoard 测试浮球，不调用模型、不抓屏；确认你的 iPhone 型号、芯片架构和 Bootstrap 版本均在目标范围。
+2. 再做打开聊天面板、拖动、跨 App 返回/隐藏和重启恢复；如果 SpringBoard tweak 不稳定，改走 TrollFools 注入一个普通测试 App 的局部浮层。
+3. 最后才验证“当前画面提问”。被注入的 App 可以尝试在用户点按后读取自己前台窗口的快照；这只覆盖该 App。全屏跨 App 画面在 iOS 16.1 上需要另行验证 ReplayKit/系统级方案，不能套用 iOS 27 的 ScreenCaptureKit 示例。
+4. 每次采集都要求明确点按、显示预览、再发送；不后台连续采集，不默认自动上传。
+
+若不进入 Bootstrap/系统 tweak 路线，可用 PiP 显示简短回答，并通过 Share Extension、快捷指令或从目标 App 注入插件提交截图/文本；这是更易维护但交互受限的后备方案。
 
 ## 推荐顺序
 
